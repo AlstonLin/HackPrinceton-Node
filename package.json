@@ -4,7 +4,9 @@
   "dependencies": {
     "express": "*",
     "mongoose" : "*",
-    "mongodb" : "*"
+    "body-parser":"*",
+    "mongodb" : "*",
+    "connect" : "*"
   },
   "devDependencies": {
     "should": "~7.1.0",
