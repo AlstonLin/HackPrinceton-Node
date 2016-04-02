@@ -98,5 +98,23 @@ app.post('/newFood', function(req, res){
   });
 });
 
+app.post('/getFood', function(req, res){
+  var user_id = req.body.user_id;
+  Food.find({owner: ObjectId(user_id)}).sort({createdAt: -1}).exec(function(err, foods){
+    if (err){
+      console.log("Error while retrieving food: " + err);
+      res.json({
+        success: false
+      })
+    } else{
+      console.log("Retrieved food: " + JSON.stringify(foods));
+      res.json({
+        success: true,
+        data: foods
+      })
+    }
+  });
+});
+
 app.listen(PORT);
 console.log('Express server started on port %s', PORT);
