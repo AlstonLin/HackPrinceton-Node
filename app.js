@@ -86,10 +86,15 @@ app.post('/newFood', function(req, res){
   newFood.save(function(err){
     if (err){
       console.log("Error saving food: " + err);
+      res.json({
+        success: false
+      });
     } else{
       console.log("Successfully saved new food");
+      res.json({
+        success: true
+      });
     }
-    res.end("");
   });
 });
 
