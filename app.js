@@ -64,6 +64,33 @@ app.post('/login', function(req, res){
 });
 
 app.post('/newFood', function(req, res){
+  var name = req.body.name;
+  var calories = req.body.calories;
+  var colesterol = req.body.colesterol;
+  var fat = req.body.fat;
+  var protien = req.body.protien;
+  var carbs = req.body.carbs;
+  var sugar = req.body.sugar;
+  var sodium = req.body.sodium;
+  var newFood = new Food({
+    name: name,
+    calories: calories,
+    colesterol: colesterol,
+    fat: fat,
+    protien: protien,
+    carbs: carbs,
+    sugar: sugar,
+    sodium: sodium,
+    owner: req.body.user_id
+  });
+  newFood.save(function(err){
+    if (err){
+      console.log("Error saving food: " + err);
+    } else{
+      console.log("Successfully saved new food");
+    }
+    res.end("");
+  });
 });
 
 app.listen(PORT);

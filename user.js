@@ -12,7 +12,6 @@ var userSchema = mongoose.Schema({
   totalCarbs: { type: Number, default: 0 },
   totalSugar: { type: Number, default: 0 },
   totalSodium: { type: Number, default: 0 },
-  foods: [{type : mongoose.Schema.Types.ObjectId, ref: 'food'}]
 });
 
 module.exports = mongoose.model('user', userSchema);
