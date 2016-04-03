@@ -25,35 +25,6 @@ var storage = multer.diskStorage({
     filename =  file.fieldname + Date.now();
     console.log("Uploaded " + filename);
     callback(null, filename);
-    // Creates entry
-    var name = req.body.name;
-    var calories = req.body.calories;
-    var colesterol = req.body.colesterol;
-    var fat = req.body.fat;
-    var protien = req.body.protien;
-    var carbs = req.body.carbs;
-    var sugar = req.body.sugar;
-    var sodium = req.body.sodium;
-    var newFood = new Food({
-      name: name,
-      calories: calories,
-      colesterol: colesterol,
-      fat: fat,
-      protien: protien,
-      carbs: carbs,
-      sugar: sugar,
-      sodium: sodium,
-      owner: req.body.user_id,
-      filename: filename
-    });
-
-    newFood.save(function(err){
-      if (err){
-        console.log("Error saving food: " + err);
-      } else{
-        console.log("Successfully saved new food");
-      }
-    });
   }
 });
 var upload = multer({ storage : storage }).single('image');
@@ -108,16 +79,47 @@ app.post('/login', function(req, res){
 
 app.post('/newFood', function(req, res){
   console.log("Upload Request");
-  upload(req, res, function(err) {
+  upload(req, res, function(err, filename) {
     if (err) {
-      console.log("ERROR: " + err);
+      console.log("ERROR UPLOADING: " + err);
       res.json({
         success: false
       });
     } else{
       console.log("Successfully Uploaded");
-      res.json({
-        success: true
+      // Creates entry
+      var name = req.body.name;
+      var calories = req.body.calories;
+      var colesterol = req.body.colesterol;
+      var fat = req.body.fat;
+      var protien = req.body.protien;
+      var carbs = req.body.carbs;
+      var sugar = req.body.sugar;
+      var sodium = req.body.sodium;
+      var newFood = new Food({
+        name: name,
+        calories: calories,
+        colesterol: colesterol,
+        fat: fat,
+        protien: protien,
+        carbs: carbs,
+        sugar: sugar,
+        sodium: sodium,
+        owner: req.body.user_id,
+        filename: filename
+      });
+      newFood.save(function(err){
+        if (err){
+          console.log("Error saving food: " + err);
+          res.json({
+            success: false
+          });
+        } else{
+          console.log("Successfully saved new food");
+          res.json({
+            success: true
+          });
+        }
       });
     }
   });
