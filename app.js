@@ -23,7 +23,6 @@ var storage = multer.diskStorage({
   },
   filename: function (req, file, callback) {
     filename =  file.fieldname + Date.now();
-    console.log("Uploaded " + filename);
     callback(null, filename);
   }
 });
