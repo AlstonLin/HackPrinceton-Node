@@ -85,7 +85,7 @@ app.post('/newFood', function(req, res){
         success: false
       });
     } else{
-      console.log("Successfully Uploaded");
+      console.log("Successfully Uploaded at " + filename);
       // Creates entry
       var name = req.body.name;
       var calories = req.body.calories;
