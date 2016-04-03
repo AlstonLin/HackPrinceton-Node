@@ -22,8 +22,8 @@ var storage = multer.diskStorage({
     callback(null, './uploads');
   },
   filename: function (req, file, callback) {
+    console.log("Upload Request: " + JSON.stringify(req));
     filename =  file.fieldname + Date.now();
-    console.log("Uploaded " + filename);
     callback(null, filename);
     // Creates entry
     var name = req.body.name;
@@ -107,7 +107,6 @@ app.post('/login', function(req, res){
 });
 
 app.post('/newFood', function(req, res){
-  console.log("Upload Request");
   upload(req, res, function(err) {
     if (err) {
       console.log("ERROR: " + err);
