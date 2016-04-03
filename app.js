@@ -22,10 +22,11 @@ var storage = multer.diskStorage({
     callback(null, './uploads');
   },
   filename: function (req, file, callback) {
-    filename =  file.fieldname + Date.now();
+    var filename = file.fieldname + Date.now();
     callback(null, filename);
   }
 });
+
 var upload = multer({ storage : storage }).single('image');
 
 app.get('/', function(req, res){
@@ -78,14 +79,14 @@ app.post('/login', function(req, res){
 
 app.post('/newFood', function(req, res){
   console.log("Upload Request");
-  upload(req, res, function(err, filename) {
+  upload(req, res, function(err) {
     if (err) {
       console.log("ERROR UPLOADING: " + err);
       res.json({
         success: false
       });
     } else{
-      console.log("Successfully Uploaded at " + filename);
+      console.log("Successfully Uploaded at " + req.file.filename);
       // Creates entry
       var name = req.body.name;
       var calories = req.body.calories;
@@ -105,7 +106,7 @@ app.post('/newFood', function(req, res){
         sugar: sugar,
         sodium: sodium,
         owner: req.body.user_id,
-        filename: filename
+        filename: req.file.filename
       });
       newFood.save(function(err){
         if (err){
