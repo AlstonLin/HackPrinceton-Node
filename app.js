@@ -1,10 +1,12 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var connect = require('connect');
+var multer = require('multer');
 var app = express();
 var ObjectId = require('mongodb').ObjectID;
 
 bodyParser = require('body-parser');
+app.use(express.static(__dirname + '/uploads'))
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -14,6 +16,47 @@ var connection = mongoose.connect('mongodb://localhost:27017/db');
 var Food = require('./food.js');
 var User = require('./user.js');
 var PORT = 3000;
+
+var storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, './uploads');
+  },
+  filename: function (req, file, callback) {
+    filename =  file.fieldname + Date.now();
+    console.log("Uploaded " + filename);
+    callback(null, filename);
+    // Creates entry
+    var name = req.body.name;
+    var calories = req.body.calories;
+    var colesterol = req.body.colesterol;
+    var fat = req.body.fat;
+    var protien = req.body.protien;
+    var carbs = req.body.carbs;
+    var sugar = req.body.sugar;
+    var sodium = req.body.sodium;
+    var newFood = new Food({
+      name: name,
+      calories: calories,
+      colesterol: colesterol,
+      fat: fat,
+      protien: protien,
+      carbs: carbs,
+      sugar: sugar,
+      sodium: sodium,
+      owner: req.body.user_id,
+      filename: filename
+    });
+
+    newFood.save(function(err){
+      if (err){
+        console.log("Error saving food: " + err);
+      } else{
+        console.log("Successfully saved new food");
+      }
+    });
+  }
+});
+var upload = multer({ storage : storage }).single('image');
 
 app.get('/', function(req, res){
     res.send('Hello World');
@@ -64,33 +107,15 @@ app.post('/login', function(req, res){
 });
 
 app.post('/newFood', function(req, res){
-  var name = req.body.name;
-  var calories = req.body.calories;
-  var colesterol = req.body.colesterol;
-  var fat = req.body.fat;
-  var protien = req.body.protien;
-  var carbs = req.body.carbs;
-  var sugar = req.body.sugar;
-  var sodium = req.body.sodium;
-  var newFood = new Food({
-    name: name,
-    calories: calories,
-    colesterol: colesterol,
-    fat: fat,
-    protien: protien,
-    carbs: carbs,
-    sugar: sugar,
-    sodium: sodium,
-    owner: req.body.user_id
-  });
-  newFood.save(function(err){
-    if (err){
-      console.log("Error saving food: " + err);
+  console.log("Upload Request");
+  upload(req, res, function(err) {
+    if (err) {
+      console.log("ERROR: " + err);
       res.json({
         success: false
       });
     } else{
-      console.log("Successfully saved new food");
+      console.log("Successfully Uploaded");
       res.json({
         success: true
       });

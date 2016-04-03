@@ -6,7 +6,8 @@
     "mongoose" : "*",
     "body-parser":"*",
     "mongodb" : "*",
-    "connect" : "*"
+    "connect" : "*",
+    "multer" : "*"
   },
   "devDependencies": {
     "should": "~7.1.0",

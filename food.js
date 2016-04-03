@@ -11,7 +11,8 @@ var foodSchema = mongoose.Schema({
   sugar: { type: Number, default: 0 },
   sodium: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
-  owner: {type : mongoose.Schema.Types.ObjectId, ref: 'user'}
+  owner: {type : mongoose.Schema.Types.ObjectId, ref: 'user'},
+  filename: String
 });
 
 module.exports = mongoose.model('food', foodSchema);
